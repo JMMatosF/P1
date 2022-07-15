@@ -1,24 +1,16 @@
-
 #include <stdio.h>
 
 #include "othello_func.h"
 #define SZ 8
 
 
-int main(int argc, char*argv[])
-{
-  char board [SZ][SZ];
-  int moves[SZ][SZ];
-  int x= 0;
-  char y;                 
-  int no_of_games = 0;             
-  int n_movimentos = 0;                                                                         
-  int player = 0; 
-  int linhas_ficheiro[64];
-  char colunas_ficheiro[64];
-  int file = 0;
+int main(int argc, char*argv[]){
+  char board [SZ][SZ], colunas_ficheiro[64], y, linhas_ficheiro[64];
+  int moves[SZ][SZ], x= 0, no_of_games = 0, n_movimentos = 0, player = 0, file = 0, invalid_moves = 0;                                                                          
+  
   init_board(board);
-  int invalid_moves = 0;
+
+
   FILE *ficheiro = NULL;  //CONSOANTE O QUE SE ESCREVE NO TERMINAL, ELE JOGA INTERATIVAMENTE OU ATRAVES DE UM FICHEIRO DE TEXTO
    if(argc < 2){
   printf("VAI SER MOSTRADO O TABULEIRO INICIAL: \n");

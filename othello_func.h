@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #define SZ 8
 void init_board(char board[SZ][SZ]);

@@ -1,9 +1,6 @@
-
 #include <stdio.h>
 #include "othello_func.h"
 #define SZ 8
-
-
 
 void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO 
 	for(int i = 0; i<SZ; i++){              //COM AS POSIÇÕES DE ACORDO COM 
@@ -11,12 +8,11 @@ void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO
                 board[i][j] = '.';
 		}
 	}
-	board[3][3] = 'O';
-	board[4][4] = 'O';
-	board[4][3] = 'X';
-	board[3][4] = 'X';
-}
 
+	board[3][3] = board[4][4] = 'O';
+	board[4][3] = board[3][4] = 'X';
+
+}
 
 void print_board(char board[SZ][SZ]){                                 //PRINT O TABULEIRO COM A
 	char coluna = 'a'; 
@@ -36,7 +32,6 @@ void print_board(char board[SZ][SZ]){                                 //PRINT O 
     printf("\n");
 }
 
-
 void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
   int line;                                                      //FUNÇÃO AUXILIAR QUE
   int col;                                                      //INICIALIZA O ARRAY MOVES A 0, 
@@ -48,12 +43,7 @@ void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
     }
 
 }
-/*
-int random(){
-    srand(time(0));
-    return rand() % 2;
-}
-*/
+
 int oponente(char color){                          //FUNÇÃO PARA VER QUAL É O OPONENTE.
 char adversario;                                      // SE O JOGADOR FOR 'O', O OPONENTE É 'X', CASO CONTRÁRIO É 'O' 
 /*                                                       // OPERADOR TERNÁRIO "?" "Condição ? verdadeiro : falso"
@@ -70,7 +60,6 @@ if(random() == 1){
 adversario = (color == 'O')? 'X' : 'O';
     return 0;
 }
-
 
 int find_squares_not_valid(char board[SZ][SZ], int line, int col){         //SE A CASA NÃO FOR VALIDA PARA JOGAR,
   for(line = 0; line < SZ; line++)                                           //PORQUE ESTÁ OCUPADA, CONTINUA A PROCURA
@@ -125,7 +114,6 @@ int flanked(char board[SZ][SZ], int moves[][SZ], char color)          //ENCONTRA
    return n_movimentos; 
 }
 
-
 int jogadas_validas(char board[SZ][SZ], int moves[][SZ], char color)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
 {
    oponente(color);
@@ -134,7 +122,6 @@ int jogadas_validas(char board[SZ][SZ], int moves[][SZ], char color)   //CHAMA A
 
     return 0;
 }
-
 
 int play(char board[SZ][SZ], int line, int col, char color) // RACIOCINIO IDENTICO ÀS FUNÇÕES QUE VERIFICAM SE A JOGADA É VALIDA
 {
@@ -195,7 +182,6 @@ int count_pieces(char board[SZ][SZ], char color)
    return pecas;     
 }
 
-
 int temp_board(char board[SZ][SZ]){
   int i;
   int j;
@@ -207,6 +193,7 @@ int temp_board(char board[SZ][SZ]){
   }
 return 0;
 }
+
 int not_arrayMoves(int line, int col, int moves[][SZ]){
   for(line = 0 ; line<SZ ; line++)
      for(col = 0 ; col<SZ ; col++)
@@ -245,8 +232,6 @@ int jogada_melhor_pontuada(char board[SZ][SZ], int moves[][SZ], char color)
      }
    return pecas;                   
 }
-
-
 
 void jogada_pc(char board[SZ][SZ], int moves[][SZ], char color)
 {
