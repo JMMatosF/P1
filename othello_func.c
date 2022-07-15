@@ -304,7 +304,7 @@ while(n_movimentos < SZ*SZ && invalid_moves<2)
        if(player++ % 2)                              //É FEITO UM CONTADOR QUE CONTA O PLAYER, SEMPRE QUE É NUMERO PAR, É O PLAYER A JOGAR
        {
            if (++invalid_moves < 2) {
-               printf("\nSem jogadas validas, é a vez do adversario");
+               printf("\nSem jogadas validas, vez do adversario\n");
                scanf("%c", &joga_de_novo);
            }
       
