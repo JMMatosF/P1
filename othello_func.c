@@ -1,6 +1,4 @@
-#include <stdio.h>
 #include "othello_func.h"
-#define SZ 8
 
 void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO 
 	for(int i = 0; i<SZ; i++){              //COM AS POSIÇÕES DE ACORDO COM 
@@ -9,8 +7,8 @@ void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO
 		}
 	}
 
-	board[3][3] = board[4][4] = 'O';
-	board[4][3] = board[3][4] = 'X';
+	board[3][3] = board[4][4] = 'o';
+	board[4][3] = board[3][4] = 'x';
 
 }
 
@@ -42,33 +40,6 @@ void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
       }
     }
 
-}
-
-int oponente(char color){                          //FUNÇÃO PARA VER QUAL É O OPONENTE.
-char adversario;                                      // SE O JOGADOR FOR 'O', O OPONENTE É 'X', CASO CONTRÁRIO É 'O' 
-/*                                                       // OPERADOR TERNÁRIO "?" "Condição ? verdadeiro : falso"
-if(random() == 1){
-  player = 'O';
-  adversario = 'X';
-}
-  else{
-        player = 'X';
-        adversario = 'O';
-  }
-}
-*/
-adversario = (color == 'O')? 'X' : 'O';
-    return 0;
-}
-
-int find_squares_not_valid(char board[SZ][SZ], int line, int col){         //SE A CASA NÃO FOR VALIDA PARA JOGAR,
-  for(line = 0; line < SZ; line++)                                           //PORQUE ESTÁ OCUPADA, CONTINUA A PROCURA
-     for(col = 0; col < SZ; col++)
-     {
-       if(board[line][col] != '.')   
-         continue;    
-     }
-  return 0;
 }
 
 int flanked(char board[SZ][SZ], int moves[][SZ], char color)          //ENCONTRA CASA VALIDAS PARA AS JOGADAS
@@ -114,14 +85,15 @@ int flanked(char board[SZ][SZ], int moves[][SZ], char color)          //ENCONTRA
    return n_movimentos; 
 }
 
-int jogadas_validas(char board[SZ][SZ], int moves[][SZ], char color)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
+/*int jogadas_validas(char board[SZ][SZ], int linha, int col, int player)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
 {
    oponente(color);
    jogadas_a_zero(board, moves);
    flanked(board, moves, color);
 
-    return 0;
+    return 1;
 }
+*/
 
 int play(char board[SZ][SZ], int line, int col, char color) // RACIOCINIO IDENTICO ÀS FUNÇÕES QUE VERIFICAM SE A JOGADA É VALIDA
 {
@@ -263,7 +235,7 @@ void jogada_pc(char board[SZ][SZ], int moves[][SZ], char color)
        temp_board(board);
 
        play(temporario_board, line, col, color);              //CHAMADA MAS FUNÇÕES
-       jogadas_validas(temporario_board, temp_moves, oponente(color));
+       //jogadas_validas(temporario_board, temp_moves, oponente(color));
        atualizar_pecas = jogada_melhor_pontuada(temporario_board, temp_moves, oponente(color));
       
      }
@@ -289,32 +261,70 @@ int print_num_pieces(char board[SZ][SZ]){
      return 0;
 }
 
-void input_output( char board[SZ][SZ]){
-int n_movimentos = 0; 
-int moves[SZ][SZ];
-int invalid_moves = 0;
-int line, col;
-int player = 0;    
-char joga_de_novo;
-int x;
-char y;  
-while(n_movimentos < SZ*SZ && invalid_moves<2)
-     {
-       print_board(board);             
-       if(player++ % 2)                              //É FEITO UM CONTADOR QUE CONTA O PLAYER, SEMPRE QUE É NUMERO PAR, É O PLAYER A JOGAR
-       {
-           if (++invalid_moves < 2) {
-               printf("\nSem jogadas validas, vez do adversario\n");
-               scanf("%c", &joga_de_novo);
-           }
-      
-       }
-       else if(jogadas_validas(board, moves, 'X')){
-           //if(jogadas_validas(board, moves, random()==2)){
-           invalid_moves = 0;
-           jogada_pc(board, moves, 'X');   //ENTAO O COMPUTADOR JOGA
-           n_movimentos++;
-       }
-     }
-     print_num_pieces(board);
+void input_output( char board[SZ][SZ],int turn){
+  int line, col, player = 0;
+  char t_col;
+
+       print_board(board);
+
+       if (turn%2 == 0){
+        player = 0;
+        }else{ 
+          player = 1;
+        } 
+
+        printf("Indique a sua jogada como exemplo 5D!");
+        scanf("%d",&line);
+        scanf("%c",&t_col);
+        col = 'a' - t_col;
+        while (check(board,line,col,player)){
+        printf("Indique a sua jogada como exemplo 5D!");
+        scanf("%d",&line);
+        scanf("%c",&t_col);
+        col = 'a' - t_col;
+        }
+        
+
+}
+
+int check(char board[SZ][SZ], int linha, int col, int player){
+  int check1,check2,gx,gy,check3;
+  check1 = check2 = check3 = 0;
+  if (board[linha][col] =! "."){
+    check1++;
+  }
+  if (check1 =! 0)
+    return;
+
+  check2 = girate(board,linha,col,player,linha,col);
+  if (check2 != 0)
+    return check2;
+}
+
+int girate(char board[SZ][SZ],int linha,int col,int player,int gx,int gy){
+  char piece,piece2;
+  int good = 0;
+
+  if ( player%2== 0){
+    piece = "x";
+    piece2 = "o";
+  }else{
+    piece = "o";
+    piece2 = "x";
+  }
+
+  for (int x = -1; x <= 1;x++){
+    for (int y = -1; y <= 1; y++){
+      if (board[linha + x][col + y] == piece2){
+        good++;
+        
+      }
+    }
+  }
+  if (good =! 0){
+    return 1;
+  }else{
+    return 0;
+  }  
+  
 }
