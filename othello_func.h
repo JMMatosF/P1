@@ -1,13 +1,14 @@
 #include <stdio.h>
-#define SZ 8
+#define SZ 9
 void init_board(char board[SZ][SZ]);
 void print_board(char board[SZ][SZ]);
 void jogadas_a_zero(char board [SZ][SZ], int moves[][SZ]);
+char jogador(int turno);
 int oponente(char color);
 int find_squares_not_valid(char board[SZ][SZ], int line, int col);
 int flanked(char board[SZ][SZ], int moves[][SZ], char color);
 int jogadas_validas(char board[SZ][SZ], int linha, int col, int player);
-int play(char board[SZ][SZ], int line, int col, char player);
+void play(char board[SZ][SZ], int line, int col, char player);
 int count_pieces(char board[SZ][SZ], char color);
 int temp_board(char board[SZ][SZ]);
 int not_arrayMoves(int line, int col, int moves[][SZ]);

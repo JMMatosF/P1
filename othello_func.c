@@ -1,4 +1,5 @@
 #include "othello_func.h"
+#include <stdio.h>
 
 void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO 
 	for(int i = 0; i<SZ; i++){              //COM AS POSIÇÕES DE ACORDO COM 
@@ -7,28 +8,31 @@ void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO
 		}
 	}
 
-	board[3][3] = board[4][4] = 'o';
-	board[4][3] = board[3][4] = 'x';
+	board[4][4] = board[5][5] = 'o';
+	board[5][4] = board[4][5] = 'x';
 
 }
 
 void print_board(char board[SZ][SZ]){                                 //PRINT O TABULEIRO COM A
 	char coluna = 'a'; 
-  int i, j, letra_da_coluna;                                          //RESPETIVA LINHA E COLUNA DE LETRAS E NUMEROS
+  int i, j, a;                                          //RESPETIVA LINHA E COLUNA DE LETRAS E NUMEROS
 	printf("   ");
-	for(letra_da_coluna =0; letra_da_coluna<SZ; letra_da_coluna++){
-		printf("%c ", coluna + letra_da_coluna);
+	for(a =0; a<SZ; a++){
+		printf("%c ", coluna + a);
 	}
 	printf("\n");
-	for(i = 0; i<SZ; i++){
+
+	/*for(i = 0; i<SZ; i++){
 		printf("%d  ", i+1);
 		for(j = 0; j<SZ; j++){
 			printf("%c ", board[i][j]);
 		}
 		printf("\n");
-	}
+	}*/
     printf("\n");
 }
+
+
 
 void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
   int line;                                                      //FUNÇÃO AUXILIAR QUE
@@ -42,17 +46,34 @@ void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
 
 }
 
+char jogador(int turno){
+    if(turno % 2 ==0){
+        return 'x';
+    }
+    else
+        return 'o';
+}
+
+int oponente(char jogador){                          //FUNÇÃO PARA VER QUAL É O OPONENTE.
+    if(jogador == 'x'){
+        return 'o';
+    }
+    else
+        return 'x';
+
+}
+
+
 int flanked(char board[SZ][SZ], int moves[][SZ], char color)          //ENCONTRA CASA VALIDAS PARA AS JOGADAS
 {
    int line, col;
    int delta_line, delta_col;              
    int i, j;            
-   int n_movimentos = 0; 
+   int n_movimentos = 0;
    
    for(line = 0; line < SZ; line++)
      for(col = 0; col < SZ; col++)
      {
-       find_squares_not_valid(board, line, col);                 
        for(delta_line = -1; delta_line <= 1; delta_line++)                      //PROCURA NAS DIAGONAIS 
          for(delta_col = -1; delta_col <= 1; delta_col++)
          { 
@@ -95,14 +116,14 @@ int flanked(char board[SZ][SZ], int moves[][SZ], char color)          //ENCONTRA
 }
 */
 
-int play(char board[SZ][SZ], int line, int col, char color) // RACIOCINIO IDENTICO ÀS FUNÇÕES QUE VERIFICAM SE A JOGADA É VALIDA
+void play(char board[SZ][SZ], int line, int col, char jogador) // RACIOCINIO IDENTICO ÀS FUNÇÕES QUE VERIFICAM SE A JOGADA É VALIDA
 {
    int delta_line;                   
    int delta_col;                   
    int i;                          
    int j;                            
-   oponente(color);
-   board[line][col] = color;           
+   oponente(jogador);
+   board[line][col] = jogador;
 
    for(delta_line = -1; delta_line <= 1; delta_line++)
      for(delta_col = -1; delta_col <= 1; delta_col++)
@@ -111,7 +132,7 @@ int play(char board[SZ][SZ], int line, int col, char color) // RACIOCINIO IDENTI
        if(line + delta_line < 0 || line + delta_line >= SZ|| col + delta_col < 0 || col + delta_col >= SZ || (delta_line==0 && delta_col==0))
              continue;
 
-       if(board[line + delta_line][col + delta_col] == oponente(color))
+       if(board[line + delta_line][col + delta_col] == oponente(jogador))
        {
          i = line + delta_line;        
          j = col + delta_col;        
@@ -126,16 +147,15 @@ int play(char board[SZ][SZ], int line, int col, char color) // RACIOCINIO IDENTI
            if(board[i][j] == '.')
              break;
 
-           if(board[i][j] == color)
+           if(board[i][j] == jogador)
            {                                   // FAZ A TROCA DAS PEÇAS, PASSANSO A ASSIM A PERTENCEREM AO OUTRO JOGADOR
-             while(board[i = i - delta_line][j = j - delta_col]== oponente(color))
-               board[i][j] = color;    
+             while(board[i = i - delta_line][j = j - delta_col]== oponente(jogador))
+               board[i][j] = jogador;
              break;                    
            } 
          }
        }
      }
-   return 0;
 }
 
 int count_pieces(char board[SZ][SZ], char color)
@@ -273,7 +293,7 @@ void input_output( char board[SZ][SZ],int turn){
           player = 1;
         } 
 
-        printf("Indique a sua jogada como exemplo 5D!");
+        printf("Indique a jogada: ");
         scanf("%d",&line);
         scanf("%c",&t_col);
         col = 'a' - t_col;
