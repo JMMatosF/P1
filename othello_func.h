@@ -2,7 +2,6 @@
 #define SZ 9
 void init_board(char board[SZ][SZ]);
 void print_board(char board[SZ][SZ]);
-void jogadas_a_zero(char board [SZ][SZ], int moves[][SZ]);
 char player(int turno);
 char oponente(char jogador);
 void flanked(char board[SZ][SZ],int line, int col,char jogador);
