@@ -4,10 +4,9 @@ void init_board(char board[SZ][SZ]);
 void print_board(char board[SZ][SZ]);
 void jogadas_a_zero(char board [SZ][SZ], int moves[][SZ]);
 char jogador(int turno);
-char oponente(char jogador)
-int find_squares_not_valid(char board[SZ][SZ], int line, int col);
-void flanked(char board[SZ][SZ], int moves[][SZ]);
-int jogadas_validas(char board[SZ][SZ], int linha, int col, int player);
+char oponente(char jogador);
+void flanked(char board[SZ][SZ], int moves[][SZ], char jogador);
+int jogadas_validas(char board[SZ][SZ], int linha, int col, char jogador);
 void play(char board[SZ][SZ], int line, int col, char player);
 int count_pieces(char board[SZ][SZ], char color);
 int temp_board(char board[SZ][SZ]);

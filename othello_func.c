@@ -15,7 +15,7 @@ void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO
 
 void print_board(char board[SZ][SZ]){                                 //PRINT O TABULEIRO COM A
 	char coluna = 'a'; 
-  int i, j, a;                                          //RESPETIVA LINHA E COLUNA DE LETRAS E NUMEROS
+  int a;                                          //RESPETIVA LINHA E COLUNA DE LETRAS E NUMEROS
 	printf("   ");
 	for(a =0; a<SZ; a++){
 		printf("%c ", coluna + a);
@@ -64,12 +64,12 @@ char oponente(char jogador){                          //FUNÇÃO PARA VER QUAL �
 }
 
 
-void flanked(char board[SZ][SZ], int moves[][SZ])          //VIRA PEÇAS A PARTIR DO PONTO ONDE FOI EFETUADA A JOGADA
+void flanked(char board[SZ][SZ], int moves[][SZ],char jogador)          //VIRA PEÇAS A PARTIR DO PONTO ONDE FOI EFETUADA A JOGADA
 {
-       int line, col, delta_line, delta_col, n_movimentos;
-       char jogador1 = oponente(jogador1);
+    int line, col, delta_line = 1, delta_col = 1, n_movimentos;
+    char jogador1 = oponente(jogador);
 
-       board[line][col] = jogador1;
+    board[line][col] = jogador;
 
     while (board[line + delta_line][col + delta_col] == jogador1){
         board[line + delta_line][col + delta_col];
@@ -80,15 +80,30 @@ void flanked(char board[SZ][SZ], int moves[][SZ])          //VIRA PEÇAS A PARTI
     }
 }
 
-/*int jogadas_validas(char board[SZ][SZ], int linha, int col, int player)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
+int jogadas_validas(char board[SZ][SZ], int line, int col, char jogador)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
 {
-   oponente(color);
-   jogadas_a_zero(board, moves);
-   flanked(board, moves, color);
+    char jogador2 = oponente(jogador);
+    int delta_line = 1, delta_col = 1, pontos = 0;
 
-    return 1;
+    while (board[line + 1][col + 1] == jogador2){
+        delta_col++;
+        delta_line++;
+        pontos++;
+        line*= delta_line;
+        col*= delta_col;
+        if(line > 9 || col > 9){
+            break;
+        }
+    }
+    if(board[line + delta_line][col + delta_col] == jogador){
+        return pontos;
+    }
+    else
+        return 0;
+
+
 }
-*/
+
 
 void play(char board[SZ][SZ], int line, int col, char jogador) // RACIOCINIO IDENTICO ÀS FUNÇÕES QUE VERIFICAM SE A JOGADA É VALIDA
 {
