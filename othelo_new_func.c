@@ -34,11 +34,11 @@ int check(char board[SZ][SZ], int linha, int col, int player){
   if (board[linha][col] =! "."){
     check1++;
   }
-  if (check1 =! 0)
+  if (check1 != 0)
     return 1;
 
   check2 = girate(board,linha,col,player,gx,gy);
-  if (check2 =! 0)
+  if (check2 != 0)
     return 1;
 
   
