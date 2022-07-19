@@ -4,9 +4,9 @@ void init_board(char board[SZ][SZ]);
 void print_board(char board[SZ][SZ]);
 void jogadas_a_zero(char board [SZ][SZ], int moves[][SZ]);
 char jogador(int turno);
-int oponente(char color);
+char oponente(char jogador)
 int find_squares_not_valid(char board[SZ][SZ], int line, int col);
-int flanked(char board[SZ][SZ], int moves[][SZ], char color);
+void flanked(char board[SZ][SZ], int moves[][SZ]);
 int jogadas_validas(char board[SZ][SZ], int linha, int col, int player);
 void play(char board[SZ][SZ], int line, int col, char player);
 int count_pieces(char board[SZ][SZ], char color);

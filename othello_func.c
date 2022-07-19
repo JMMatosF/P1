@@ -46,7 +46,7 @@ void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
 
 }
 
-char jogador(int turno){
+char player(int turno){
     if(turno % 2 ==0){
         return 'x';
     }
@@ -54,7 +54,7 @@ char jogador(int turno){
         return 'o';
 }
 
-int oponente(char jogador){                          //FUNÇÃO PARA VER QUAL É O OPONENTE.
+char oponente(char jogador){                          //FUNÇÃO PARA VER QUAL É O OPONENTE.
     if(jogador == 'x'){
         return 'o';
     }
@@ -64,46 +64,20 @@ int oponente(char jogador){                          //FUNÇÃO PARA VER QUAL É
 }
 
 
-int flanked(char board[SZ][SZ], int moves[][SZ], char color)          //ENCONTRA CASA VALIDAS PARA AS JOGADAS
+void flanked(char board[SZ][SZ], int moves[][SZ])          //VIRA PEÇAS A PARTIR DO PONTO ONDE FOI EFETUADA A JOGADA
 {
-   int line, col;
-   int delta_line, delta_col;              
-   int i, j;            
-   int n_movimentos = 0;
-   
-   for(line = 0; line < SZ; line++)
-     for(col = 0; col < SZ; col++)
-     {
-       for(delta_line = -1; delta_line <= 1; delta_line++)                      //PROCURA NAS DIAGONAIS 
-         for(delta_col = -1; delta_col <= 1; delta_col++)
-         { 
-           if(line + delta_line < 0 || line + delta_line >= SZ|| col + delta_col < 0 || col + delta_col >= SZ || (delta_line==0 && delta_col==0))
-             continue;                                                     //NÃO ULTRAPASSA OS LIMITES E REFERE-SE SEMPRE À PEÇA EM QUESTÃO
+       int line, col, delta_line, delta_col, n_movimentos;
+       char jogador1 = oponente(jogador1);
 
-           if(board[line + delta_line][col + delta_col] == oponente(color))
-           {
+       board[line][col] = jogador1;
 
-             i = line + delta_line;         //MOVE-SE EM DELTA DIREÇÃO ENQUANTO A PEÇA FOR DO OPONENTE   
-             j = col + delta_col;                
-             
-             while(1)                   //LOOP INFINITO, SEMPRE EXECUTADO
-             {
-               i = i + delta_line;                  
-               j = j + delta_col;  
-               if(i < 0 || i >= SZ || j < 0 || j >= SZ || board[i][j] == '.' ) // PARA QUANDO ENCONTRA UMA CASA VAZIA
-                 break;
-                
-               if(board[i][j] == color)
-               {
-                 moves[line][col] = 1;    //TUDO SE CONCRETIZOU, JOGADA VÁLIDA, ARRAY MOVES = 1
-                 n_movimentos++;         
-                 break;                 
-               }                
-             }
-           }
-         }     
-     }
-   return n_movimentos; 
+    while (board[line + delta_line][col + delta_col] == jogador1){
+        board[line + delta_line][col + delta_col];
+        delta_line++;
+        delta_col++;
+        line *= delta_line;
+        col *= delta_col;
+    }
 }
 
 /*int jogadas_validas(char board[SZ][SZ], int linha, int col, int player)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
