@@ -137,9 +137,37 @@ void fim_jogo(char board[SZ][SZ], char jogador){
     }
 }
 
-void jogada_pc(char board[SZ][SZ], char jogador)
+void jogada_pc(char board[SZ][SZ], int moves[][SZ], char color)
 {
 
+    int line;
+    int col;
+    char temporario_board[SZ][SZ];
+    int temp_moves[SZ][SZ];
+    int linha_com_mais_turns;
+    int coluna_com_mais_turns;
+    int atualizar_pecas = 0;
+    int pecas = 100;
+
+
+    for(line = 0; line< SZ; line++)
+        for(col = 0; col < SZ; col++)
+        {
+            if(moves[line][col] == 0)
+                continue;
+
+            if(atualizar_pecas < pecas)
+            {
+                pecas = atualizar_pecas;      //O JOGADOR FICA COM MENOS PEÇAS NO TABULEIRO DO QUE AQUELAS QUE TINHA ANTES?
+                linha_com_mais_turns = line;  // SIM, ENTÃO GUARDA ESSA COORDENADA E O NOVO NUMERO DE PEÇAS
+                coluna_com_mais_turns = col;
+            }
+
+            temp_board(board,temporario_board);
+
+            play(temporario_board, line, col, color);              //CHAMADA MAS FUNÇÕES
+
+        }
 }
 
 void input_output( char board[SZ][SZ],int turn){
@@ -159,7 +187,7 @@ void input_output( char board[SZ][SZ],int turn){
         scanf("%c",&t_col);
         col = 'a' - t_col;
         while (jogadas_validas(board,line,col,player)){
-        printf("Indique a sua jogada como exemplo 5D!");
+        printf("Indique a sua jogada como por exemplo 5D!");
         scanf("%d",&line);
         scanf("%c",&t_col);
         col = 'a' - t_col;
