@@ -33,7 +33,7 @@ void print_board(char board[SZ][SZ]){                                 //PRINT O 
 void jogadas_a_zero(char board[SZ][SZ], int moves[][SZ]){
   int line;                                                      //FUNÇÃO AUXILIAR QUE
   int col;                                                      //INICIALIZA O ARRAY MOVES A 0, 
-                                                                //PARA CASO HAJA UMA JOGADA VÁLIDA ESTE "MARCÁ-LA"
+                                                                //PARA CASO HAJA UMA JOGADA VÁLIDA ESTE "MARCA-LA"
     for(line = 0; line < SZ; line++){
       for(col = 0; col < SZ; col++){
        moves[line][col] = 0;
@@ -290,15 +290,17 @@ void input_output( char board[SZ][SZ],int turn){
 int check(char board[SZ][SZ], int linha, int col, int player){
   int check1,check2,gx,gy,check3;
   check1 = check2 = check3 = 0;
-  if (board[linha][col] =! "."){
+  if (board[linha][col] != '.'){
     check1++;
   }
-  if (check1 =! 0)
-    return;
+  if (check1 != 0){
+    return check1;
+  }
 
   check2 = girate(board,linha,col,player,linha,col);
-  if (check2 != 0)
+  if (check2 != 0){
     return check2;
+  }
 }
 
 int girate(char board[SZ][SZ],int linha,int col,int player,int gx,int gy){
@@ -306,11 +308,11 @@ int girate(char board[SZ][SZ],int linha,int col,int player,int gx,int gy){
   int good = 0;
 
   if ( player%2== 0){
-    piece = "x";
-    piece2 = "o";
+    piece = 'x';
+    piece2 = 'x';
   }else{
-    piece = "o";
-    piece2 = "x";
+    piece = 'x';
+    piece2 = 'x';
   }
 
   for (int x = -1; x <= 1;x++){
