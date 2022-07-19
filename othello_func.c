@@ -14,22 +14,14 @@ void init_board(char board[SZ][SZ]){    //INICIALIZA O TABULEIRO
 }
 
 void print_board(char board[SZ][SZ]){                                 //PRINT O TABULEIRO COM A
-	char coluna = 'a'; 
-  int a;                                          //RESPETIVA LINHA E COLUNA DE LETRAS E NUMEROS
-	printf("   ");
-	for(a =0; a<SZ; a++){
-		printf("%c ", coluna + a);
-	}
-	printf("\n");
-
-	/*for(i = 0; i<SZ; i++){
-		printf("%d  ", i+1);
-		for(j = 0; j<SZ; j++){
-			printf("%c ", board[i][j]);
-		}
-		printf("\n");
-	}*/
+    for (int line = 0; line < 9; line++){
+        for (int col = 0; col < 9; col++) {
+            printf("%c ", board[line][col]);
+        }
+        printf("\n");
+    }
     printf("\n");
+
 }
 
 
@@ -64,9 +56,9 @@ char oponente(char jogador){                          //FUNÇÃO PARA VER QUAL �
 }
 
 
-void flanked(char board[SZ][SZ], int moves[][SZ],char jogador)          //VIRA PEÇAS A PARTIR DO PONTO ONDE FOI EFETUADA A JOGADA
+void flanked(char board[SZ][SZ],int line, int col,char jogador)          //VIRA PEÇAS A PARTIR DO PONTO ONDE FOI EFETUADA A JOGADA
 {
-    int line, col, delta_line = 1, delta_col = 1, n_movimentos;
+    int delta_line = 1, delta_col = 1, n_movimentos;
     char jogador1 = oponente(jogador);
 
     board[line][col] = jogador;
@@ -80,7 +72,7 @@ void flanked(char board[SZ][SZ], int moves[][SZ],char jogador)          //VIRA P
     }
 }
 
-int jogadas_validas(char board[SZ][SZ], int line, int col, char jogador)   //CHAMA AS FUNÇÕES QUE FAZEM PARTE DA VERIFICAÇÃO DA JOGADA
+int jogadas_validas(char board[SZ][SZ], int line, int col, char jogador)
 {
     char jogador2 = oponente(jogador);
     int delta_line = 1, delta_col = 1, pontos = 0;
@@ -105,62 +97,20 @@ int jogadas_validas(char board[SZ][SZ], int line, int col, char jogador)   //CHA
 }
 
 
-void play(char board[SZ][SZ], int line, int col, char jogador) // RACIOCINIO IDENTICO ÀS FUNÇÕES QUE VERIFICAM SE A JOGADA É VALIDA
+void play(char board[SZ][SZ], int line, int col, char jogador)
 {
-   int delta_line;                   
-   int delta_col;                   
-   int i;                          
-   int j;                            
-   oponente(jogador);
-   board[line][col] = jogador;
+   char jogador2 = oponente(jogador);
 
-   for(delta_line = -1; delta_line <= 1; delta_line++)
-     for(delta_col = -1; delta_col <= 1; delta_col++)
-     { 
-       
-       if(line + delta_line < 0 || line + delta_line >= SZ|| col + delta_col < 0 || col + delta_col >= SZ || (delta_line==0 && delta_col==0))
-             continue;
+    for (int l = -1; l <= 1 ; l++) {
+        for (int c = -1; c <=1; c++){
+            if(board[line][col] == '.' && board[line + l][col + c] == jogador2){
+                if(jogadas_validas(board,line,col, jogador) != 0){
+                    flanked(board,line,col, jogador);
+                }
+            }
+        }
 
-       if(board[line + delta_line][col + delta_col] == oponente(jogador))
-       {
-         i = line + delta_line;        
-         j = col + delta_col;        
-         while(1)
-         {
-           i = i + delta_line;          
-           j = j + delta_col;           
-
-           if(i < 0 || j < 0 || i >= SZ)
-             break;
-           
-           if(board[i][j] == '.')
-             break;
-
-           if(board[i][j] == jogador)
-           {                                   // FAZ A TROCA DAS PEÇAS, PASSANSO A ASSIM A PERTENCEREM AO OUTRO JOGADOR
-             while(board[i = i - delta_line][j = j - delta_col]== oponente(jogador))
-               board[i][j] = jogador;
-             break;                    
-           } 
-         }
-       }
-     }
-}
-
-int count_pieces(char board[SZ][SZ], char color)
-{
-   int pecas = 0;      
-   int line;             // O COMPUTADOR COMEÇA COM 100 PEÇAS "int pecas = 100;"
-   int col;
-  oponente(color);
-
-   for(line = 0; line < SZ; line++) 
-     for(col = 0; col < SZ; col++)
-   { 
-     pecas = pecas - board[line][col] == oponente(color);  //DECREMENTA O NUMERO DE PEÇAS DO COMPUTADOR
-     pecas = pecas + board[line][col] == color;         //AUMENTA O NUMERO DE PEÇAS DO JOGADOR
-   }
-   return pecas;     
+    }
 }
 
 int temp_board(char board[SZ][SZ]){
@@ -205,13 +155,11 @@ int jogada_melhor_pontuada(char board[SZ][SZ], int moves[][SZ], char color)
         not_arrayMoves(line, col, moves);
         temp_board(board);                                 //CHAMADA DAS FUNÇÕES
 
-       play(new_board, line, col, color);  
-
-       atualizar_pecas= count_pieces(new_board, color);  //ATUALIZA A FUNÇÃO QUE CONTA O NUMERO DE PEÇAS DE CADA UM
+       play(new_board, line, col, color);
 
        
      }
-   return pecas;                   
+   return 0;
 }
 
 void jogada_pc(char board[SZ][SZ], int moves[][SZ], char color)
@@ -286,7 +234,7 @@ void input_output( char board[SZ][SZ],int turn){
         scanf("%d",&line);
         scanf("%c",&t_col);
         col = 'a' - t_col;
-        while (check(board,line,col,player)){
+        while (jogadas_validas(board,line,col,player)){
         printf("Indique a sua jogada como exemplo 5D!");
         scanf("%d",&line);
         scanf("%c",&t_col);
